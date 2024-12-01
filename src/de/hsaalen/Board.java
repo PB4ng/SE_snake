@@ -73,6 +73,7 @@ public class Board extends JPanel implements ActionListener {
     private void initGame() {
 
         place_snake_at_initial_location();
+        place_apple_at_random_location();
         start_game_loop_timer();
     }
 
@@ -127,7 +128,7 @@ public class Board extends JPanel implements ActionListener {
         if ((x[0] == apple_x) && (y[0] == apple_y)) {
 
             currentSnakeSize++;
-            locateApple();
+            place_apple_at_random_location();
         }
     }
 
@@ -195,7 +196,7 @@ public class Board extends JPanel implements ActionListener {
         return ( heightInPixels / tileSizeInPixels ) - 1;
     }
 
-    private void locateApple() {
+    private void place_apple_at_random_location() {
 
         int r = (int) (Math.random() * maxTileX());
         apple_x = ((r * tileSizeInPixels));
