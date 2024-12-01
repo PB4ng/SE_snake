@@ -22,11 +22,12 @@ public class Board extends JPanel implements ActionListener {
     public final int tileSizeInPixels = 10;
     public final int maxSnakeLength = 900;
     public final int refreshRateInIMS = 140;
+    public final int initSnakeSize = 3;
 
     private final int x[] = new int[maxSnakeLength];
     private final int y[] = new int[maxSnakeLength];
 
-    private int dots;
+    private int currentSnakeSize;
     private int apple_x;
     private int apple_y;
 
@@ -71,15 +72,12 @@ public class Board extends JPanel implements ActionListener {
 
     private void initGame() {
 
-        dots = 3;
+        place_snake_at_initial_location();
+        start_game_loop_timer();
+    }
 
-        for (int z = 0; z < dots; z++) {
-            x[z] = 50 - z * 10;
-            y[z] = 50;
-        }
-        
-        locateApple();
-
+    public void start_game_loop_timer()
+    {
         timer = new Timer(refreshRateInIMS, this);
         timer.start();
     }
@@ -97,7 +95,7 @@ public class Board extends JPanel implements ActionListener {
 
             g.drawImage(apple, apple_x, apple_y, this);
 
-            for (int z = 0; z < dots; z++) {
+            for (int z = 0; z < currentSnakeSize; z++) {
                 if (z == 0) {
                     g.drawImage(head, x[z], y[z], this);
                 } else {
@@ -128,14 +126,14 @@ public class Board extends JPanel implements ActionListener {
 
         if ((x[0] == apple_x) && (y[0] == apple_y)) {
 
-            dots++;
+            currentSnakeSize++;
             locateApple();
         }
     }
 
     private void move() {
 
-        for (int z = dots; z > 0; z--) {
+        for (int z = currentSnakeSize; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
         }
@@ -159,7 +157,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkCollision() {
 
-        for (int z = dots; z > 0; z--) {
+        for (int z = currentSnakeSize; z > 0; z--) {
 
             if ((z > 4) && (x[0] == x[z]) && (y[0] == y[z])) {
                 inGame = false;
@@ -249,6 +247,16 @@ public class Board extends JPanel implements ActionListener {
                 rightDirection = false;
                 leftDirection = false;
             }
+        }
+    }
+
+    public void place_snake_at_initial_location()
+    {
+        currentSnakeSize = initSnakeSize;
+        for (int z = 0; z < currentSnakeSize; z++)
+        {
+            x[z] = 50 - z * 10;
+            y[z] = 50;
         }
     }
 }
